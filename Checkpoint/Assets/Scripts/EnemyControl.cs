@@ -24,7 +24,8 @@ public class EnemyControl : MonoBehaviour
         Idle,
         Wake,
         Attack,
-        Move
+        Move,
+        Death
         
     }
 
@@ -116,6 +117,7 @@ public class EnemyControl : MonoBehaviour
 
     void Animation()
     {
-
+       anim.SetBool ("pbufo", current == State.Wake);
+      
     }
 }

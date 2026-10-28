@@ -7,6 +7,7 @@ public class PlayerControl : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 direction;
+  
 
     void Awake()
     { 
@@ -29,4 +30,6 @@ public class PlayerControl : MonoBehaviour
     {
         rb.linearVelocity = direction;
     }
+
+ 
 }
