@@ -18,6 +18,7 @@ public class EnemyControl : MonoBehaviour
     private SpriteRenderer sr;
 
     bool attacking;
+    bool wake;
 
     public enum State
     {
@@ -75,6 +76,7 @@ public class EnemyControl : MonoBehaviour
         if (current == State.Wake)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
+          
 
             if (player.transform.position.x > transform.position.x)
             {
@@ -104,20 +106,55 @@ public class EnemyControl : MonoBehaviour
         {
             StartCoroutine(Attacking());
         }
+
+        if (current == State.Move || current == State.Wake)
+        {
+            wake = true;
+        }
+        else if (current == State.Idle)
+        {
+            wake = false;
+        }
     }
 
     IEnumerator Attacking()
     {
         attacking = true;
-        yield return new WaitForSeconds(1.5f);
-        current = State.Idle;
+        yield return new WaitForSeconds(0.5f);
         attacking = false;
-        yield return new WaitForSeconds(3.0f);
     }
 
     void Animation()
     {
-       anim.SetBool ("pbufo", current == State.Wake);
-      
+        anim.SetBool("pwake", wake);
+        anim.SetBool("pattack", attacking);
+
+    }
+
+    private void OnTriggerEnter2D (Collider2D collision)
+    {
+        if (collision.tag == "damage")
+        {
+           
+                StartCoroutine(Damage());
+        }
+    }
+
+    IEnumerator Damage()
+    {
+        life--;
+
+        if (life > 0)
+        {
+            sr.color = Color.red;
+            yield return new WaitForSeconds(0.25f);
+            sr.color = Color.white;
+            yield return new WaitForSeconds(0.25f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.4f);
+            Destroy(gameObject);
+        }
     }
 }
